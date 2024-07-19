@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 effective-pom.xml
+data/h2-data.trace.db
 
 ### STS ###
 .apt_generated
