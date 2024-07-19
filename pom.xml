@@ -23,6 +23,7 @@
     <spotless.version>2.43.0</spotless.version>
     <spring-cloud.version>2023.0.3</spring-cloud.version>
     <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
+    <xmlunit2.version>2.10.0</xmlunit2.version>
   </properties>
   <dependencyManagement>
     <dependencies>
