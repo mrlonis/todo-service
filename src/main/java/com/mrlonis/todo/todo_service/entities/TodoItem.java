@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class TodoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "pr_url", joinColumns = @JoinColumn(name = "todo_item_id"))

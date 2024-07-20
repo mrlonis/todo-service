@@ -21,10 +21,10 @@ import lombok.NoArgsConstructor;
 public class PrUrl {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "todo_item_id")
-    private Integer todoItemId;
+    private Long todoItemId;
 
     @Column
     private String url;
