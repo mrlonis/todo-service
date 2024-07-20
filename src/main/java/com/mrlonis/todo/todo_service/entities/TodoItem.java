@@ -15,17 +15,25 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 @Entity(name = "todo_items")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Jacksonized
 @Builder
 public class TodoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String title;
+
+    @Column(name = "jira_url")
+    private String jiraUrl;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "pr_url", joinColumns = @JoinColumn(name = "todo_item_id"))
