@@ -5,4 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "data", path = "pr-urls")
-public interface PrUrlRepository extends JpaRepository<PrUrl, Integer> {}
+public interface PrUrlRepository extends JpaRepository<PrUrl, Long> {}

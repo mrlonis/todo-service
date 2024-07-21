@@ -1,0 +1,112 @@
+package com.mrlonis.todo.todo_service.entities;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mrlonis.todo.todo_service.TestUtils;
+import com.mrlonis.todo.todo_service.dtos.TodoItemDto;
+import com.mrlonis.todo.todo_service.repositories.PrUrlRepository;
+import com.mrlonis.todo.todo_service.repositories.TestingUrlRepository;
+import com.mrlonis.todo.todo_service.repositories.TodoItemRepository;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+class TodoItemTests {
+    private static final String EXPECTED_TODO_ITEM_JSON_PATTERN =
+            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake\",\"fake\",\"fake\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake\",\"fake\",\"fake\"],\"completed\":false,\"oneNoteUrl\":\"fake\"}";
+
+    @LocalServerPort
+    private int port;
+
+    private WebClient webClient;
+
+    @Autowired
+    private TodoItemRepository todoItemRepository;
+
+    @Autowired
+    private PrUrlRepository prUrlRepository;
+
+    @Autowired
+    private TestingUrlRepository testingUrlRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        webClient = WebClient.builder().baseUrl("http://localhost:" + port).build();
+    }
+
+    @AfterEach
+    void tearDown() {
+        todoItemRepository.deleteAll();
+        todoItemRepository.flush();
+        prUrlRepository.deleteAll();
+        prUrlRepository.flush();
+        testingUrlRepository.deleteAll();
+        testingUrlRepository.flush();
+    }
+
+    @Test
+    void testSerialization() {
+        TodoItem todoItem = TestUtils.createSaveAndAssertTodoItem(
+                todoItemRepository,
+                TestUtils.FAKE,
+                TestUtils.FAKE,
+                TestUtils.FAKE,
+                TestUtils.FAKE,
+                false,
+                TestUtils.FAKE);
+        var prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        var prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        var prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        var testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        var testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        var testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(11L));
+    }
+
+    @Test
+    void testDeserialization() {
+        TodoItemDto todoItemDto = TodoItemDto.builder()
+                .title(TestUtils.FAKE)
+                .jiraUrl(TestUtils.FAKE)
+                .prUrls(List.of(TestUtils.FAKE, TestUtils.FAKE, TestUtils.FAKE))
+                .cloudForgeConsoleUrl(TestUtils.FAKE)
+                .releaseRequestUrl(TestUtils.FAKE)
+                .urlsUsedForTesting(List.of(TestUtils.FAKE, TestUtils.FAKE, TestUtils.FAKE))
+                .completed(false)
+                .oneNoteUrl(TestUtils.FAKE)
+                .build();
+        TodoItem todoItems = webClient
+                .post()
+                .uri("/api/todo/item")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(todoItemDto)
+                .retrieve()
+                .bodyToMono(TodoItem.class)
+                .block();
+        assertNotNull(todoItems);
+
+        // Call same Get logic used in other tests
+        TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(12L));
+    }
+
+    private String getExpectedTodoItemJson(Long id) {
+        return EXPECTED_TODO_ITEM_JSON_PATTERN.replace("<id>", id.toString());
+    }
+
+    private String getExpectedTodoItemsJson(Long id) {
+        return "[" + getExpectedTodoItemJson(id) + "]";
+    }
+}

@@ -5,4 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "data", path = "testing-urls")
-public interface TestingUrlRepository extends JpaRepository<TestingUrl, Integer> {}
+public interface TestingUrlRepository extends JpaRepository<TestingUrl, Long> {}

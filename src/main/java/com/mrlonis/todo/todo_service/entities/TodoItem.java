@@ -33,7 +33,7 @@ public class TodoItem {
     private String title;
 
     @Column(name = "jira_url")
-    private String jiraUrl;
+    @Nullable private String jiraUrl;
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "pr_url", joinColumns = @JoinColumn(name = "todo_item_id"))
