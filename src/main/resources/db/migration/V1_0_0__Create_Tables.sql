@@ -9,7 +9,7 @@ CREATE TABLE todo_items
     testing_urls            VARCHAR(100000),
     completed               BOOL      DEFAULT FALSE,
     onenote_url             VARCHAR(10000),
-    created_on              TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_on              TIMESTAMP(9) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     pi                      VARCHAR(50)   NOT NULL,
     sprint                  int           NOT NULL,
     type                    TINYINT   NOT NULL
