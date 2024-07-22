@@ -7,12 +7,12 @@ CREATE TABLE todo_items
     cloud_forge_console_url VARCHAR(1000),
     release_request_url     VARCHAR(1000),
     testing_urls            VARCHAR(100000),
-    completed               BOOL      DEFAULT FALSE,
+    completed               BOOL                        DEFAULT FALSE,
     onenote_url             VARCHAR(10000),
     created_on              TIMESTAMP(9) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     pi                      VARCHAR(50)   NOT NULL,
     sprint                  int           NOT NULL,
-    type                    TINYINT   NOT NULL
+    type                    TINYINT       NOT NULL
 );
 
 CREATE TABLE pr_url
