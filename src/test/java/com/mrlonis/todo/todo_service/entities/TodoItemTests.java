@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrlonis.todo.todo_service.TestUtils;
 import com.mrlonis.todo.todo_service.dtos.TodoItemDto;
+import com.mrlonis.todo.todo_service.enums.TodoItemType;
 import com.mrlonis.todo.todo_service.repositories.PrUrlRepository;
 import com.mrlonis.todo.todo_service.repositories.TestingUrlRepository;
 import com.mrlonis.todo.todo_service.repositories.TodoItemRepository;
+import com.mrlonis.todo.todo_service.utils.Constants;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +25,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @ActiveProfiles("test")
 class TodoItemTests {
     private static final String EXPECTED_TODO_ITEM_JSON_PATTERN =
-            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake\",\"fake\",\"fake\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake\",\"fake\",\"fake\"],\"completed\":false,\"oneNoteUrl\":\"fake\"}";
+            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake\",\"fake\",\"fake\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake\",\"fake\",\"fake\"],\"completed\":false,\"oneNoteUrl\":\"fake\",\"createdOn\":\"<createdOn>\",\"pi\":\"fake\",\"sprint\":1,\"type\":\"ASSIGNED\"}";
 
     @LocalServerPort
     private int port;
@@ -87,6 +89,10 @@ class TodoItemTests {
                 .urlsUsedForTesting(List.of(TestUtils.FAKE, TestUtils.FAKE, TestUtils.FAKE))
                 .completed(false)
                 .oneNoteUrl(TestUtils.FAKE)
+                .createdOn(TestUtils.CREATED_ON)
+                .pi(TestUtils.FAKE)
+                .sprint(TestUtils.SPRINT)
+                .type(TodoItemType.ASSIGNED)
                 .build();
         TodoItem todoItems = webClient
                 .post()
@@ -103,7 +109,9 @@ class TodoItemTests {
     }
 
     private String getExpectedTodoItemJson(Long id) {
-        return EXPECTED_TODO_ITEM_JSON_PATTERN.replace("<id>", id.toString());
+        return EXPECTED_TODO_ITEM_JSON_PATTERN
+                .replace("<id>", id.toString())
+                .replace("<createdOn>", TestUtils.CREATED_ON.format(Constants.DATE_TIME_FORMATTER));
     }
 
     private String getExpectedTodoItemsJson(Long id) {

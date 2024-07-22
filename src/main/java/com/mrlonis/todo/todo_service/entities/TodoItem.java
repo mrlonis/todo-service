@@ -1,5 +1,6 @@
 package com.mrlonis.todo.todo_service.entities;
 
+import com.mrlonis.todo.todo_service.enums.TodoItemType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -58,4 +60,16 @@ public class TodoItem {
 
     @Column(name = "onenote_url")
     @Nullable private String oneNoteUrl;
+
+    @Column(name = "created_on")
+    private ZonedDateTime createdOn;
+
+    @Column
+    private String pi;
+
+    @Column
+    private int sprint;
+
+    @Column
+    private TodoItemType type;
 }

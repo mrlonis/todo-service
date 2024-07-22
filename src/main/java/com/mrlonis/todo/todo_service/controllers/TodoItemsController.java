@@ -40,6 +40,10 @@ public class TodoItemsController {
                         .urlsUsedForTesting(todoItem.getUrlsUsedForTesting())
                         .completed(todoItem.isCompleted())
                         .oneNoteUrl(todoItem.getOneNoteUrl())
+                        .createdOn(todoItem.getCreatedOn())
+                        .pi(todoItem.getPi())
+                        .sprint(todoItem.getSprint())
+                        .type(todoItem.getType())
                         .build())
                 .toList();
     }
@@ -47,14 +51,20 @@ public class TodoItemsController {
     @PostMapping("/item")
     public TodoItem addItem(@RequestBody TodoItemDto todoItemDto) {
         log.info("Received the following TodoItemDto: {}", todoItemDto);
-        TodoItem todoItem = TodoItem.builder()
+        TodoItem.TodoItemBuilder todoItemBuilder = TodoItem.builder()
                 .title(todoItemDto.getTitle())
                 .jiraUrl(todoItemDto.getJiraUrl())
                 .cloudForgeConsoleUrl(todoItemDto.getCloudForgeConsoleUrl())
                 .releaseRequestUrl(todoItemDto.getReleaseRequestUrl())
                 .completed(todoItemDto.isCompleted())
                 .oneNoteUrl(todoItemDto.getOneNoteUrl())
-                .build();
+                .pi(todoItemDto.getPi())
+                .sprint(todoItemDto.getSprint())
+                .type(todoItemDto.getType());
+        if (todoItemDto.getCreatedOn() != null) {
+            todoItemBuilder.createdOn(todoItemDto.getCreatedOn());
+        }
+        TodoItem todoItem = todoItemBuilder.build();
         todoItem = todoItemRepository.saveAndFlush(todoItem);
 
         if (todoItemDto.getPrUrls() != null && !todoItemDto.getPrUrls().isEmpty()) {

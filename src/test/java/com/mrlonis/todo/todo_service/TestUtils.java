@@ -8,9 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.mrlonis.todo.todo_service.entities.PrUrl;
 import com.mrlonis.todo.todo_service.entities.TestingUrl;
 import com.mrlonis.todo.todo_service.entities.TodoItem;
+import com.mrlonis.todo.todo_service.enums.TodoItemType;
 import com.mrlonis.todo.todo_service.repositories.PrUrlRepository;
 import com.mrlonis.todo.todo_service.repositories.TestingUrlRepository;
 import com.mrlonis.todo.todo_service.repositories.TodoItemRepository;
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -21,6 +23,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @UtilityClass
 public class TestUtils {
     public static final String FAKE = "fake";
+    public static final ZonedDateTime CREATED_ON = ZonedDateTime.now();
+    public static final int SPRINT = 1;
 
     public static TodoItem createSaveAndAssertTodoItem(
             TodoItemRepository todoItemRepository,
@@ -37,6 +41,10 @@ public class TestUtils {
                 .releaseRequestUrl(releaseRequestUrl)
                 .completed(completed)
                 .oneNoteUrl(oneNoteUrl)
+                .createdOn(CREATED_ON)
+                .pi(FAKE)
+                .sprint(SPRINT)
+                .type(TodoItemType.ASSIGNED)
                 .build();
         todoItem = todoItemRepository.saveAndFlush(todoItem);
         assertNotNull(todoItem);
@@ -60,6 +68,10 @@ public class TestUtils {
         } else {
             assertNull(todoItem.getOneNoteUrl());
         }
+        assertEquals(CREATED_ON, todoItem.getCreatedOn());
+        assertEquals(FAKE, todoItem.getPi());
+        assertEquals(SPRINT, todoItem.getSprint());
+        assertEquals(TodoItemType.ASSIGNED, todoItem.getType());
         return todoItem;
     }
 
@@ -139,6 +151,10 @@ public class TestUtils {
                         actualTodoItem.getUrlsUsedForTesting().get(i));
             }
         }
+        assertTrue(todoItem.getCreatedOn().isEqual(actualTodoItem.getCreatedOn()));
+        assertEquals(todoItem.getPi(), actualTodoItem.getPi());
+        assertEquals(todoItem.getSprint(), actualTodoItem.getSprint());
+        assertEquals(todoItem.getType(), actualTodoItem.getType());
     }
 
     public static void callApiAndAssertJson(WebClient webClient, String expectedJson) {
