@@ -23,9 +23,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @UtilityClass
 public class TestUtils {
+    public static long TODO_ITEM_COUNT = 0;
     public static final String FAKE = "fake";
     public static final ZonedDateTime CREATED_ON = ZonedDateTime.now();
     public static final int SPRINT = 1;
+
+    public static void incrementTodoItemCount() {
+        TODO_ITEM_COUNT++;
+    }
 
     public static TodoItem createSaveAndAssertTodoItem(
             TodoItemRepository todoItemRepository,
@@ -102,7 +107,7 @@ public class TestUtils {
         return testingUrl;
     }
 
-    public static void callApiAndAssert(
+    public static boolean callApiAndAssert(
             WebClient webClient,
             @Nullable TodoItem todoItem,
             @Nullable List<PrUrl> prUrls,
@@ -118,7 +123,7 @@ public class TestUtils {
         assertNotNull(todoItems);
         if (todoItem == null) {
             assertTrue(todoItems.isEmpty());
-            return;
+            return true;
         } else {
             assertEquals(1, todoItems.size());
         }
@@ -160,9 +165,10 @@ public class TestUtils {
         assertEquals(todoItem.getPi(), actualTodoItem.getPi());
         assertEquals(todoItem.getSprint(), actualTodoItem.getSprint());
         assertEquals(todoItem.getType(), actualTodoItem.getType());
+        return true;
     }
 
-    public static void callApiAndAssertJson(WebClient webClient, String expectedJson) {
+    public static boolean callApiAndAssertJson(WebClient webClient, String expectedJson) {
         String todoItems = webClient
                 .get()
                 .uri("/api/todo/items")
@@ -172,5 +178,6 @@ public class TestUtils {
                 .block();
         assertNotNull(todoItems);
         assertEquals(expectedJson, todoItems);
+        return true;
     }
 }

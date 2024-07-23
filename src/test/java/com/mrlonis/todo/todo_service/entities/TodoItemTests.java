@@ -1,6 +1,7 @@
 package com.mrlonis.todo.todo_service.entities;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrlonis.todo.todo_service.TestUtils;
@@ -69,13 +70,20 @@ class TodoItemTests {
                 TestUtils.FAKE,
                 false,
                 TestUtils.FAKE);
-        var prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        var prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        var prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        var testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        var testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        var testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(11L));
+        TestUtils.incrementTodoItemCount();
+        PrUrl prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        assertNotNull(prUrl1);
+        PrUrl prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        assertNotNull(prUrl2);
+        PrUrl prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        assertNotNull(prUrl3);
+        TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        assertNotNull(testingUrl1);
+        TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        assertNotNull(testingUrl2);
+        TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        assertNotNull(testingUrl3);
+        assertTrue(TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(TestUtils.TODO_ITEM_COUNT)));
     }
 
     @Test
@@ -103,9 +111,10 @@ class TodoItemTests {
                 .bodyToMono(TodoItem.class)
                 .block();
         assertNotNull(todoItems);
+        TestUtils.incrementTodoItemCount();
 
         // Call same Get logic used in other tests
-        TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(12L));
+        assertTrue(TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(TestUtils.TODO_ITEM_COUNT)));
     }
 
     private String getExpectedTodoItemJson(Long id) {

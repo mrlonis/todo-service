@@ -1,6 +1,10 @@
 package com.mrlonis.todo.todo_service.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.mrlonis.todo.todo_service.TestUtils;
+import com.mrlonis.todo.todo_service.entities.PrUrl;
+import com.mrlonis.todo.todo_service.entities.TestingUrl;
 import com.mrlonis.todo.todo_service.entities.TodoItem;
 import com.mrlonis.todo.todo_service.repositories.PrUrlRepository;
 import com.mrlonis.todo.todo_service.repositories.TestingUrlRepository;
@@ -50,85 +54,40 @@ class TodoItemsControllerTests {
     }
 
     @Test
-    void testGetAllTodoItems_whenThereAreNoTodoItems() {
-        TestUtils.callApiAndAssert(webClient, null, null, null);
+    void testGetItems_whenThereAreNoTodoItems() {
+        assertTrue(TestUtils.callApiAndAssert(webClient, null, null, null));
     }
 
     @Test
-    void testGetAllTodoItems_whenThereIsAnEmptyTodoItem() {
+    void testGetItems_whenThereIsAnEmptyTodoItem() {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, null);
+        TestUtils.incrementTodoItemCount();
+        assertTrue(TestUtils.callApiAndAssert(webClient, todoItem, null, null));
     }
 
     @Test
-    void testGetAllTodoItems_whenThereIsJiraUrl() {
+    void testGetItems_whenAllFieldsArePresent() {
         TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, FAKE, null, null, false, null);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, null);
+                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, FAKE, FAKE, FAKE, true, FAKE);
+        TestUtils.incrementTodoItemCount();
+        PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        assertTrue(TestUtils.callApiAndAssert(webClient, todoItem, List.of(prUrl), List.of(testingUrl)));
     }
 
     @Test
-    void testGetAllTodoItems_whenThereIsOnePrUrl() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
-        var prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        TestUtils.callApiAndAssert(webClient, todoItem, List.of(prUrl), null);
-    }
-
-    @Test
-    void testGetAllTodoItems_whenThereIsMoreThanOnePrUrl() {
+    void testGetItems_whenAllFieldsArePresent_butUrlListsHaveMultiple() {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
-        var prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        var prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        var prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        TestUtils.callApiAndAssert(webClient, todoItem, List.of(prUrl1, prUrl2, prUrl3), null);
-    }
-
-    @Test
-    void testGetAllTodoItems_whenThereIsCloudForgeConsoleUrl() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, FAKE, null, false, null);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, null);
-    }
-
-    @Test
-    void testGetAllTodoItems_whenThereIsReleaseRequestUrl() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, FAKE, false, null);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, null);
-    }
-
-    @Test
-    void testGetAllTodoItems_whenThereIsOneTestingUrl() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
-        var testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, List.of(testingUrl));
-    }
-
-    @Test
-    void testGetAllTodoItems_whenThereIsMoreThanOneTestingUrl() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
-        var testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        var testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        var testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, List.of(testingUrl1, testingUrl2, testingUrl3));
-    }
-
-    @Test
-    void testGetAllTodoItems_whenTodoItemIsCompleted() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, true, null);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, null);
-    }
-
-    @Test
-    void testGetAllTodoItems_whenTodoItemHasOneNoteUrl() {
-        TodoItem todoItem =
-                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, FAKE);
-        TestUtils.callApiAndAssert(webClient, todoItem, null, null);
+        TestUtils.incrementTodoItemCount();
+        PrUrl prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        PrUrl prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        PrUrl prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        assertTrue(TestUtils.callApiAndAssert(
+                webClient, todoItem, List.of(prUrl1, prUrl2, prUrl3), List.of(testingUrl1, testingUrl2, testingUrl3)));
     }
 }
