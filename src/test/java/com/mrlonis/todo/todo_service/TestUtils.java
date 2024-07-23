@@ -15,6 +15,7 @@ import com.mrlonis.todo.todo_service.repositories.TodoItemRepository;
 import com.mrlonis.todo.todo_service.utils.Constants;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import lombok.experimental.UtilityClass;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.core.ParameterizedTypeReference;
@@ -107,7 +108,7 @@ public class TestUtils {
         return testingUrl;
     }
 
-    public static boolean callApiAndAssert(
+    public static boolean callGetTodoItemsAndAssert(
             WebClient webClient,
             @Nullable TodoItem todoItem,
             @Nullable List<PrUrl> prUrls,
@@ -129,6 +130,70 @@ public class TestUtils {
         }
 
         TodoItem actualTodoItem = todoItems.getFirst();
+        assertEquals(todoItem.getId(), actualTodoItem.getId());
+        assertEquals(todoItem.getTitle(), actualTodoItem.getTitle());
+        assertEquals(todoItem.getJiraUrl(), actualTodoItem.getJiraUrl());
+        if (prUrls == null) {
+            assertNotNull(actualTodoItem.getPrUrls());
+            assertTrue(actualTodoItem.getPrUrls().isEmpty());
+        } else {
+            assertEquals(prUrls.size(), actualTodoItem.getPrUrls().size());
+            for (int i = 0; i < todoItem.getPrUrls().size(); i++) {
+                assertEquals(prUrls.get(i).getUrl(), actualTodoItem.getPrUrls().get(i));
+            }
+        }
+        assertEquals(todoItem.getCloudForgeConsoleUrl(), actualTodoItem.getCloudForgeConsoleUrl());
+        assertEquals(todoItem.getReleaseRequestUrl(), actualTodoItem.getReleaseRequestUrl());
+        assertEquals(todoItem.isCompleted(), actualTodoItem.isCompleted());
+        assertEquals(todoItem.getOneNoteUrl(), actualTodoItem.getOneNoteUrl());
+        if (testingUrls == null) {
+            assertNotNull(actualTodoItem.getUrlsUsedForTesting());
+            assertTrue(actualTodoItem.getUrlsUsedForTesting().isEmpty());
+        } else {
+            assertEquals(
+                    testingUrls.size(), actualTodoItem.getUrlsUsedForTesting().size());
+            for (int i = 0; i < testingUrls.size(); i++) {
+                assertEquals(
+                        testingUrls.get(i).getUrl(),
+                        actualTodoItem.getUrlsUsedForTesting().get(i));
+            }
+        }
+        System.out.println(todoItem.getCreatedOn());
+        System.out.println(actualTodoItem.getCreatedOn());
+        assertEquals(
+                todoItem.getCreatedOn().format(Constants.DATE_TIME_FORMATTER),
+                actualTodoItem.getCreatedOn().format(Constants.DATE_TIME_FORMATTER));
+        assertEquals(todoItem.getPi(), actualTodoItem.getPi());
+        assertEquals(todoItem.getSprint(), actualTodoItem.getSprint());
+        assertEquals(todoItem.getType(), actualTodoItem.getType());
+        return true;
+    }
+
+    public static boolean callGetTodoItemsByPiAndAssert(
+            WebClient webClient,
+            @Nullable TodoItem todoItem,
+            @Nullable List<PrUrl> prUrls,
+            @Nullable List<TestingUrl> testingUrls) {
+        ParameterizedTypeReference<Map<String, List<TodoItem>>> type = new ParameterizedTypeReference<>() {};
+        Map<String, List<TodoItem>> todoItemsByPiMap = webClient
+                .get()
+                .uri("/api/todo/itemsByPi")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(type)
+                .block();
+        assertNotNull(todoItemsByPiMap);
+        if (todoItem == null) {
+            assertTrue(todoItemsByPiMap.isEmpty());
+            return true;
+        } else {
+            assertEquals(1, todoItemsByPiMap.size());
+        }
+        assertTrue(todoItemsByPiMap.containsKey(FAKE));
+        List<TodoItem> todoItems = todoItemsByPiMap.get(FAKE);
+        assertEquals(1, todoItems.size());
+        TodoItem actualTodoItem = todoItems.getFirst();
+
         assertEquals(todoItem.getId(), actualTodoItem.getId());
         assertEquals(todoItem.getTitle(), actualTodoItem.getTitle());
         assertEquals(todoItem.getJiraUrl(), actualTodoItem.getJiraUrl());

@@ -24,13 +24,13 @@ public class TodoItemService {
     private PrUrlRepository prUrlRepository;
     private TestingUrlRepository testingUrlRepository;
 
-    public List<TodoItemDto> getItems() {
+    public List<TodoItemDto> getTodoItems() {
         return todoItemRepository.findAll().stream()
                 .map(TodoItemMapper::mapTodoItemToTodoItemDto)
                 .toList();
     }
 
-    public TodoItem addItem(TodoItemDto todoItemDto) {
+    public TodoItem createOrUpdateTodoItem(TodoItemDto todoItemDto) {
         log.info("Received the following TodoItemDto: {}", todoItemDto);
         TodoItem.TodoItemBuilder todoItemBuilder = TodoItem.builder()
                 .title(todoItemDto.getTitle())
@@ -74,7 +74,7 @@ public class TodoItemService {
         return todoItemRepository.getReferenceById(todoItem.getId());
     }
 
-    public Map<String, List<TodoItemDto>> getItemsByPi() {
+    public Map<String, List<TodoItemDto>> getTodoItemsByPi() {
         return todoItemRepository.findAll().stream()
                 .map(TodoItemMapper::mapTodoItemToTodoItemDto)
                 .collect(groupingBy(TodoItemDto::getPi));

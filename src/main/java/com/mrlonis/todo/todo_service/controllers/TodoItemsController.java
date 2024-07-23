@@ -23,17 +23,17 @@ public class TodoItemsController {
     private TodoItemService todoItemService;
 
     @GetMapping("/items")
-    public List<TodoItemDto> getItems() {
-        return todoItemService.getItems();
+    public List<TodoItemDto> getTodoItems() {
+        return todoItemService.getTodoItems();
     }
 
     @PostMapping("/item")
-    public TodoItem addItem(@RequestBody TodoItemDto todoItemDto) {
-        return todoItemService.addItem(todoItemDto);
+    public TodoItem createOrUpdateTodoItem(@RequestBody TodoItemDto todoItemDto) {
+        return todoItemService.createOrUpdateTodoItem(todoItemDto);
     }
 
     @GetMapping("/itemsByPi")
-    public Map<String, List<TodoItemDto>> getItemsByPi() {
-        return todoItemService.getItemsByPi();
+    public Map<String, List<TodoItemDto>> getTodoItemsByPi() {
+        return todoItemService.getTodoItemsByPi();
     }
 }

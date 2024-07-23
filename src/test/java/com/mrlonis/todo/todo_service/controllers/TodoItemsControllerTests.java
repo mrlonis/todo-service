@@ -54,30 +54,30 @@ class TodoItemsControllerTests {
     }
 
     @Test
-    void testGetItems_whenThereAreNoTodoItems() {
-        assertTrue(TestUtils.callApiAndAssert(webClient, null, null, null));
+    void testGetItems_whenThereAreNoTodoTodoItems() {
+        assertTrue(TestUtils.callGetTodoItemsAndAssert(webClient, null, null, null));
     }
 
     @Test
-    void testGetItems_whenThereIsAnEmptyTodoItem() {
+    void testGetTodoItems_whenThereIsAnEmptyTodoItem() {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
         TestUtils.incrementTodoItemCount();
-        assertTrue(TestUtils.callApiAndAssert(webClient, todoItem, null, null));
+        assertTrue(TestUtils.callGetTodoItemsAndAssert(webClient, todoItem, null, null));
     }
 
     @Test
-    void testGetItems_whenAllFieldsArePresent() {
+    void testGetTodoItems_whenAllFieldsArePresent() {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, FAKE, FAKE, FAKE, true, FAKE);
         TestUtils.incrementTodoItemCount();
         PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
         TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        assertTrue(TestUtils.callApiAndAssert(webClient, todoItem, List.of(prUrl), List.of(testingUrl)));
+        assertTrue(TestUtils.callGetTodoItemsAndAssert(webClient, todoItem, List.of(prUrl), List.of(testingUrl)));
     }
 
     @Test
-    void testGetItems_whenAllFieldsArePresent_butUrlListsHaveMultiple() {
+    void testGetTodoItems_whenAllFieldsArePresent_butUrlListsHaveMultiple() {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
         TestUtils.incrementTodoItemCount();
@@ -87,7 +87,23 @@ class TodoItemsControllerTests {
         TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
         TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
         TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        assertTrue(TestUtils.callApiAndAssert(
+        assertTrue(TestUtils.callGetTodoItemsAndAssert(
                 webClient, todoItem, List.of(prUrl1, prUrl2, prUrl3), List.of(testingUrl1, testingUrl2, testingUrl3)));
+    }
+
+    @Test
+    void testGetTodoItemsByPi_whenThereAreNoTodoItems() {
+        assertTrue(TestUtils.callGetTodoItemsByPiAndAssert(webClient, null, null, null));
+    }
+
+    @Test
+    void testGetTodoItemsByPi_whenAllFieldsArePresent() {
+        TodoItem todoItem =
+                TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, FAKE, FAKE, FAKE, true, FAKE);
+        TestUtils.incrementTodoItemCount();
+        PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+
+        assertTrue(TestUtils.callGetTodoItemsByPiAndAssert(webClient, todoItem, List.of(prUrl), List.of(testingUrl)));
     }
 }
