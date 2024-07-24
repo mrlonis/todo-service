@@ -79,4 +79,10 @@ public class TodoItemService {
                 .map(TodoItemMapper::mapTodoItemToTodoItemDto)
                 .collect(groupingBy(TodoItemDto::getPi));
     }
+
+    public Map<String, Map<Integer, List<TodoItemDto>>> getTodoItemsByPiAndBySprint() {
+        return todoItemRepository.findAll().stream()
+                .map(TodoItemMapper::mapTodoItemToTodoItemDto)
+                .collect(groupingBy(TodoItemDto::getPi, groupingBy(TodoItemDto::getSprint)));
+    }
 }

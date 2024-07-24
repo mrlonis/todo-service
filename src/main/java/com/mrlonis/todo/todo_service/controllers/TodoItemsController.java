@@ -36,4 +36,9 @@ public class TodoItemsController {
     public Map<String, List<TodoItemDto>> getTodoItemsByPi() {
         return todoItemService.getTodoItemsByPi();
     }
+
+    @GetMapping("/itemsByPiAndBySprint")
+    public Map<String, Map<Integer, List<TodoItemDto>>> getTodoItemsByPiAndBySprint() {
+        return todoItemService.getTodoItemsByPiAndBySprint();
+    }
 }
