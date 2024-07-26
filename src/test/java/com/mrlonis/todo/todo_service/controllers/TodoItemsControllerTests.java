@@ -71,8 +71,8 @@ class TodoItemsControllerTests {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, FAKE, FAKE, FAKE, true, FAKE);
         TestUtils.incrementTodoItemCount();
-        PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 1);
+        TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 1);
         assertTrue(TestUtils.callGetTodoItemsAndAssert(webClient, todoItem, List.of(prUrl), List.of(testingUrl)));
     }
 
@@ -81,12 +81,12 @@ class TodoItemsControllerTests {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, null, null, null, false, null);
         TestUtils.incrementTodoItemCount();
-        PrUrl prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        PrUrl prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        PrUrl prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
-        TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        PrUrl prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 1);
+        PrUrl prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 2);
+        PrUrl prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 3);
+        TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 1);
+        TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 2);
+        TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 3);
         assertTrue(TestUtils.callGetTodoItemsAndAssert(
                 webClient, todoItem, List.of(prUrl1, prUrl2, prUrl3), List.of(testingUrl1, testingUrl2, testingUrl3)));
     }
@@ -101,8 +101,8 @@ class TodoItemsControllerTests {
         TodoItem todoItem =
                 TestUtils.createSaveAndAssertTodoItem(todoItemRepository, FAKE, FAKE, FAKE, FAKE, true, FAKE);
         TestUtils.incrementTodoItemCount();
-        PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
-        TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        PrUrl prUrl = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 1);
+        TestingUrl testingUrl = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 1);
 
         assertTrue(TestUtils.callGetTodoItemsByPiAndAssert(webClient, todoItem, List.of(prUrl), List.of(testingUrl)));
     }

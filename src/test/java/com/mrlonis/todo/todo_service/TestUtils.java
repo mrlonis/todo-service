@@ -82,29 +82,32 @@ public class TestUtils {
         return todoItem;
     }
 
-    public static PrUrl createSaveAndAssertPrUrl(PrUrlRepository prUrlRepository, TodoItem todoItem) {
-        PrUrl prUrl = PrUrl.builder().todoItemId(todoItem.getId()).url(FAKE).build();
+    public static PrUrl createSaveAndAssertPrUrl(PrUrlRepository prUrlRepository, TodoItem todoItem, int count) {
+        PrUrl prUrl =
+                PrUrl.builder().todoItemId(todoItem.getId()).url(FAKE + count).build();
         prUrl = prUrlRepository.saveAndFlush(prUrl);
         assertNotNull(prUrl);
         assertNotNull(prUrl.getId());
         assertNotNull(prUrl.getTodoItemId());
         assertEquals(todoItem.getId(), prUrl.getTodoItemId());
         assertNotNull(prUrl.getUrl());
-        assertEquals(FAKE, prUrl.getUrl());
+        assertEquals(FAKE + count, prUrl.getUrl());
         return prUrl;
     }
 
     public static TestingUrl createSaveAndAssertTestingUrl(
-            TestingUrlRepository testingUrlRepository, TodoItem todoItem) {
-        TestingUrl testingUrl =
-                TestingUrl.builder().todoItemId(todoItem.getId()).url(FAKE).build();
+            TestingUrlRepository testingUrlRepository, TodoItem todoItem, int count) {
+        TestingUrl testingUrl = TestingUrl.builder()
+                .todoItemId(todoItem.getId())
+                .url(FAKE + count)
+                .build();
         testingUrl = testingUrlRepository.saveAndFlush(testingUrl);
         assertNotNull(testingUrl);
         assertNotNull(testingUrl.getId());
         assertNotNull(testingUrl.getTodoItemId());
         assertEquals(todoItem.getId(), testingUrl.getTodoItemId());
         assertNotNull(testingUrl.getUrl());
-        assertEquals(FAKE, testingUrl.getUrl());
+        assertEquals(FAKE + count, testingUrl.getUrl());
         return testingUrl;
     }
 
@@ -158,8 +161,7 @@ public class TestUtils {
                         actualTodoItem.getUrlsUsedForTesting().get(i));
             }
         }
-        System.out.println(todoItem.getCreatedOn());
-        System.out.println(actualTodoItem.getCreatedOn());
+
         assertEquals(
                 todoItem.getCreatedOn().format(Constants.DATE_TIME_FORMATTER),
                 actualTodoItem.getCreatedOn().format(Constants.DATE_TIME_FORMATTER));
@@ -222,8 +224,7 @@ public class TestUtils {
                         actualTodoItem.getUrlsUsedForTesting().get(i));
             }
         }
-        System.out.println(todoItem.getCreatedOn());
-        System.out.println(actualTodoItem.getCreatedOn());
+
         assertEquals(
                 todoItem.getCreatedOn().format(Constants.DATE_TIME_FORMATTER),
                 actualTodoItem.getCreatedOn().format(Constants.DATE_TIME_FORMATTER));

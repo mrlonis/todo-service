@@ -26,7 +26,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @ActiveProfiles("test")
 class TodoItemTests {
     private static final String EXPECTED_TODO_ITEM_JSON_PATTERN =
-            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake\",\"fake\",\"fake\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake\",\"fake\",\"fake\"],\"completed\":false,\"oneNoteUrl\":\"fake\",\"createdOn\":\"<createdOn>\",\"pi\":\"fake\",\"sprint\":1,\"type\":\"ASSIGNED\"}";
+            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake1\",\"fake2\",\"fake3\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake1\",\"fake2\",\"fake3\"],\"completed\":false,\"oneNoteUrl\":\"fake\",\"createdOn\":\"<createdOn>\",\"pi\":\"fake\",\"sprint\":1,\"type\":\"ASSIGNED\"}";
 
     @LocalServerPort
     private int port;
@@ -71,17 +71,17 @@ class TodoItemTests {
                 false,
                 TestUtils.FAKE);
         TestUtils.incrementTodoItemCount();
-        PrUrl prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        PrUrl prUrl1 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 1);
         assertNotNull(prUrl1);
-        PrUrl prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        PrUrl prUrl2 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 2);
         assertNotNull(prUrl2);
-        PrUrl prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem);
+        PrUrl prUrl3 = TestUtils.createSaveAndAssertPrUrl(prUrlRepository, todoItem, 3);
         assertNotNull(prUrl3);
-        TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        TestingUrl testingUrl1 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 1);
         assertNotNull(testingUrl1);
-        TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        TestingUrl testingUrl2 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 2);
         assertNotNull(testingUrl2);
-        TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem);
+        TestingUrl testingUrl3 = TestUtils.createSaveAndAssertTestingUrl(testingUrlRepository, todoItem, 3);
         assertNotNull(testingUrl3);
         assertTrue(TestUtils.callApiAndAssertJson(webClient, getExpectedTodoItemsJson(TestUtils.TODO_ITEM_COUNT)));
     }
@@ -91,10 +91,10 @@ class TodoItemTests {
         TodoItemDto todoItemDto = TodoItemDto.builder()
                 .title(TestUtils.FAKE)
                 .jiraUrl(TestUtils.FAKE)
-                .prUrls(List.of(TestUtils.FAKE, TestUtils.FAKE, TestUtils.FAKE))
+                .prUrls(List.of(TestUtils.FAKE + "1", TestUtils.FAKE + "2", TestUtils.FAKE + "3"))
                 .cloudForgeConsoleUrl(TestUtils.FAKE)
                 .releaseRequestUrl(TestUtils.FAKE)
-                .urlsUsedForTesting(List.of(TestUtils.FAKE, TestUtils.FAKE, TestUtils.FAKE))
+                .urlsUsedForTesting(List.of(TestUtils.FAKE + "1", TestUtils.FAKE + "2", TestUtils.FAKE + "3"))
                 .completed(false)
                 .oneNoteUrl(TestUtils.FAKE)
                 .createdOn(TestUtils.CREATED_ON)
