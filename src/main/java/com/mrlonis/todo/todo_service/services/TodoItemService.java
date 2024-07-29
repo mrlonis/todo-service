@@ -25,6 +25,7 @@ public class TodoItemService {
     private TodoItemRepository todoItemRepository;
     private PrUrlRepository prUrlRepository;
     private TestingUrlRepository testingUrlRepository;
+    private MetadataService metadataService;
 
     public List<TodoItemDto> getTodoItems() {
         return todoItemRepository.findAll().stream()
@@ -50,14 +51,18 @@ public class TodoItemService {
                 .setReleaseRequestUrl(todoItemDto.getReleaseRequestUrl())
                 .setCompleted(todoItemDto.isCompleted())
                 .setOneNoteUrl(todoItemDto.getOneNoteUrl())
+                .setCompletedOn(todoItemDto.getCompletedOn())
                 .setPi(todoItemDto.getPi())
                 .setSprint(todoItemDto.getSprint())
-                .setType(todoItemDto.getType());
+                .setType(todoItemDto.getType())
+                .setArchived(todoItemDto.isArchived());
         if (todoItemDto.getCreatedOn() != null) {
             todoItem.setCreatedOn(todoItemDto.getCreatedOn());
         }
 
         todoItem = todoItemRepository.saveAndFlush(todoItem);
+        // TODO - It is possible I decide Sprints & PIs cannot be modified, so this might only need to happen on create
+        metadataService.evictAllCaches();
 
         if (todoItemDto.getPrUrls() != null && !todoItemDto.getPrUrls().isEmpty()) {
             for (String prUrl : todoItemDto.getPrUrls()) {
@@ -104,9 +109,17 @@ public class TodoItemService {
                 .collect(groupingBy(TodoItemDto::getPi));
     }
 
-    public Map<String, Map<Integer, List<TodoItemDto>>> getTodoItemsByPiAndBySprint() {
-        return todoItemRepository.findAll().stream()
-                .map(TodoItemMapper::mapTodoItemToTodoItemDto)
-                .collect(groupingBy(TodoItemDto::getPi, groupingBy(TodoItemDto::getSprint)));
+    public Map<String, Map<Integer, List<TodoItemDto>>> getTodoItemsByPiAndBySprint(
+            Boolean hideCompleted, Boolean archived) {
+        var temp = todoItemRepository.findAll().stream().map(TodoItemMapper::mapTodoItemToTodoItemDto);
+        if (Boolean.TRUE.equals(hideCompleted) && !Boolean.TRUE.equals(archived)) {
+            temp = temp.filter(todoItemDto -> !todoItemDto.isCompleted());
+        }
+        if (Boolean.TRUE.equals(archived)) {
+            temp = temp.filter(TodoItemDto::isArchived);
+        } else {
+            temp = temp.filter(todoItemDto -> !todoItemDto.isArchived());
+        }
+        return temp.collect(groupingBy(TodoItemDto::getPi, groupingBy(TodoItemDto::getSprint)));
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,7 +40,8 @@ public class TodoItemsController {
     }
 
     @GetMapping("/itemsByPiAndBySprint")
-    public Map<String, Map<Integer, List<TodoItemDto>>> getTodoItemsByPiAndBySprint() {
-        return todoItemService.getTodoItemsByPiAndBySprint();
+    public Map<String, Map<Integer, List<TodoItemDto>>> getTodoItemsByPiAndBySprint(
+            @RequestParam(required = false) Boolean hideCompleted, @RequestParam(required = false) Boolean archived) {
+        return todoItemService.getTodoItemsByPiAndBySprint(hideCompleted, archived);
     }
 }

@@ -26,7 +26,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @ActiveProfiles("test")
 class TodoItemTests {
     private static final String EXPECTED_TODO_ITEM_JSON_PATTERN =
-            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake1\",\"fake2\",\"fake3\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake1\",\"fake2\",\"fake3\"],\"completed\":false,\"oneNoteUrl\":\"fake\",\"createdOn\":\"<createdOn>\",\"pi\":\"fake\",\"sprint\":1,\"type\":\"ASSIGNED\"}";
+            "{\"id\":<id>,\"title\":\"fake\",\"jiraUrl\":\"fake\",\"prUrls\":[\"fake1\",\"fake2\",\"fake3\"],\"cloudForgeConsoleUrl\":\"fake\",\"releaseRequestUrl\":\"fake\",\"urlsUsedForTesting\":[\"fake1\",\"fake2\",\"fake3\"],\"completed\":false,\"oneNoteUrl\":\"fake\",\"createdOn\":\"<createdOn>\",\"completedOn\":\"<completedOn>\",\"pi\":\"fake\",\"sprint\":1,\"type\":\"ASSIGNED\",\"archived\":false}";
 
     @LocalServerPort
     private int port;
@@ -98,9 +98,11 @@ class TodoItemTests {
                 .completed(false)
                 .oneNoteUrl(TestUtils.FAKE)
                 .createdOn(TestUtils.CREATED_ON)
+                .completedOn(TestUtils.COMPLETED_ON)
                 .pi(TestUtils.FAKE)
                 .sprint(TestUtils.SPRINT)
                 .type(TodoItemType.ASSIGNED)
+                .archived(false)
                 .build();
         TodoItem todoItems = webClient
                 .post()
@@ -120,7 +122,8 @@ class TodoItemTests {
     private String getExpectedTodoItemJson(Long id) {
         return EXPECTED_TODO_ITEM_JSON_PATTERN
                 .replace("<id>", id.toString())
-                .replace("<createdOn>", TestUtils.CREATED_ON.format(Constants.DATE_TIME_FORMATTER));
+                .replace("<createdOn>", TestUtils.CREATED_ON.format(Constants.DATE_TIME_FORMATTER))
+                .replace("<completedOn>", TestUtils.COMPLETED_ON.format(Constants.DATE_TIME_FORMATTER));
     }
 
     private String getExpectedTodoItemsJson(Long id) {

@@ -41,7 +41,11 @@ public class TodoItemDto {
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     private ZonedDateTime createdOn;
 
+    @JsonSerialize(using = ZonedDateTimeSerializer.class)
+    private ZonedDateTime completedOn;
+
     private String pi;
     private int sprint;
     private TodoItemType type;
+    private boolean archived;
 }

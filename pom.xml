@@ -253,6 +253,7 @@
         <configuration>
           <compilerArgs>
             <arg>-Xlint:unchecked</arg>
+            <arg>-proc:full</arg>
           </compilerArgs>
           <showDeprecation>true</showDeprecation>
           <showWarnings>true</showWarnings>
