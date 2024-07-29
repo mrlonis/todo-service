@@ -3,9 +3,9 @@ package com.mrlonis.todo.todo_service.repositories;
 import com.mrlonis.todo.todo_service.entities.PrUrl;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Repository;
 
-@RepositoryRestResource(collectionResourceRel = "data", path = "pr-urls")
+@Repository
 public interface PrUrlRepository extends JpaRepository<PrUrl, Long> {
     Optional<PrUrl> findByUrlAndTodoItemId(String url, Long todoItemId);
 }

@@ -1,6 +1,7 @@
 package com.mrlonis.todo.todo_service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,6 +28,7 @@ public class TestUtils {
     public static long TODO_ITEM_COUNT = 0;
     public static final String FAKE = "fake";
     public static final ZonedDateTime CREATED_ON = ZonedDateTime.now();
+    public static final ZonedDateTime COMPLETED_ON = ZonedDateTime.now();
     public static final int SPRINT = 1;
 
     public static void incrementTodoItemCount() {
@@ -49,9 +51,11 @@ public class TestUtils {
                 .completed(completed)
                 .oneNoteUrl(oneNoteUrl)
                 .createdOn(CREATED_ON)
+                .completedOn(COMPLETED_ON)
                 .pi(FAKE)
                 .sprint(SPRINT)
                 .type(TodoItemType.ASSIGNED)
+                .archived(false)
                 .build();
         todoItem = todoItemRepository.saveAndFlush(todoItem);
         assertNotNull(todoItem);
@@ -76,9 +80,11 @@ public class TestUtils {
             assertNull(todoItem.getOneNoteUrl());
         }
         assertEquals(CREATED_ON, todoItem.getCreatedOn());
+        assertEquals(COMPLETED_ON, todoItem.getCompletedOn());
         assertEquals(FAKE, todoItem.getPi());
         assertEquals(SPRINT, todoItem.getSprint());
         assertEquals(TodoItemType.ASSIGNED, todoItem.getType());
+        assertFalse(todoItem.isArchived());
         return todoItem;
     }
 

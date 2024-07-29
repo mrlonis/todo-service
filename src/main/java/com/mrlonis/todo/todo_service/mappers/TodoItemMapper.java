@@ -18,9 +18,11 @@ public class TodoItemMapper {
                 .completed(todoItem.isCompleted())
                 .oneNoteUrl(todoItem.getOneNoteUrl())
                 .createdOn(todoItem.getCreatedOn())
+                .completedOn(todoItem.getCompletedOn())
                 .pi(todoItem.getPi())
                 .sprint(todoItem.getSprint())
                 .type(todoItem.getType())
+                .archived(todoItem.isArchived())
                 .build();
     }
 }

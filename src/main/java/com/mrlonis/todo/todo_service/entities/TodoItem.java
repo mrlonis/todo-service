@@ -64,6 +64,9 @@ public class TodoItem {
     @Column(name = "created_on")
     private ZonedDateTime createdOn;
 
+    @Column(name = "completed_on")
+    private ZonedDateTime completedOn;
+
     @Column
     private String pi;
 
@@ -72,4 +75,7 @@ public class TodoItem {
 
     @Column
     private TodoItemType type;
+
+    @Column
+    private boolean archived;
 }
