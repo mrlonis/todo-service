@@ -8,6 +8,7 @@
   - [Display Dependency Updates](#display-dependency-updates)
   - [Display Plugin Updates](#display-plugin-updates)
     - [Display Property Updates](#display-property-updates)
+    - [Spotless Apply](#spotless-apply)
 
 ## Running the Application Locally
 
@@ -31,4 +32,10 @@
 
 ```shell
 ./mvnw versions:display-property-updates
+```
+
+### Spotless Apply
+
+```shell
+./mvnw spotless:apply
 ```
