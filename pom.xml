@@ -19,7 +19,6 @@
     <git-build-hook-maven-plugin.version>3.5.0</git-build-hook-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
     <java.version>21</java.version>
-    <logback-core.version>1.5.15</logback-core.version>
     <palantir-java-format.version>2.50.0</palantir-java-format.version>
     <spotless.version>2.43.0</spotless.version>
     <spring-cloud.version>2024.0.0</spring-cloud.version>
@@ -28,11 +27,6 @@
   </properties>
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
-        <version>${logback-core.version}</version>
-      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
