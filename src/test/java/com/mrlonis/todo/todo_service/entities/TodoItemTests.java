@@ -3,7 +3,6 @@ package com.mrlonis.todo.todo_service.entities;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrlonis.todo.todo_service.TestUtils;
 import com.mrlonis.todo.todo_service.dtos.TodoItemDto;
 import com.mrlonis.todo.todo_service.enums.TodoItemType;
@@ -41,9 +40,6 @@ class TodoItemTests {
 
     @Autowired
     private TestingUrlRepository testingUrlRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
