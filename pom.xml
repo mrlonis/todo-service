@@ -129,6 +129,9 @@
                 <include>.mvn/wrapper/maven-wrapper.properties</include>
                 <include>.gitattributes</include>
                 <include>.gitignore</include>
+                <include>.gitmodules</include>
+                <include>LICENSE</include>
+                <include>lombok.config</include>
                 <include>mvnw</include>
                 <include>mvnw.cmd</include>
               </includes>
@@ -140,18 +143,18 @@
                 <include>.github/**/*.yml</include>
                 <include>.mvn/**/*.xml</include>
                 <include>.vscode/**/*.json</include>
-                <include>**/src/**/*.json</include>
-                <include>**/src/**/*.html</include>
-                <include>**/src/**/*.xml</include>
-                <include>**/src/**/*.yaml</include>
-                <include>**/src/**/*.yml</include>
+                <include>src/**/*.json</include>
+                <include>src/**/*.html</include>
+                <include>src/**/*.xml</include>
+                <include>src/**/*.yaml</include>
+                <include>src/**/*.yml</include>
               </includes>
               <prettier>
                 <npmInstallCache>true</npmInstallCache>
                 <devDependencyProperties>
                   <property>
                     <name>prettier</name>
-                    <value>3.3.2</value>
+                    <value>3.4.2</value>
                   </property>
                   <property>
                     <name>@prettier/plugin-xml</name>
@@ -162,7 +165,7 @@
                   <printWidth>120</printWidth>
                   <xmlSelfClosingSpace>false</xmlSelfClosingSpace>
                   <xmlSortAttributesByKey>true</xmlSortAttributesByKey>
-                  <xmlWhitespaceSensitivity>ignore</xmlWhitespaceSensitivity>
+                  <xmlWhitespaceSensitivity>strict</xmlWhitespaceSensitivity>
                   <plugins>@prettier/plugin-xml</plugins>
                 </config>
               </prettier>
@@ -192,15 +195,17 @@
           </java>
           <pom>
             <includes>
-              <include>**/pom.xml</include>
+              <include>pom.xml</include>
             </includes>
             <sortPom>
               <expandEmptyElements>false</expandEmptyElements>
               <lineSeparator>\n</lineSeparator>
               <keepBlankLines>false</keepBlankLines>
+              <predefinedSortOrder>custom_1</predefinedSortOrder>
               <sortDependencies>scope,groupId,artifactId</sortDependencies>
               <sortDependencyExclusions>groupId,artifactId</sortDependencyExclusions>
               <sortDependencyManagement>groupId,artifactId</sortDependencyManagement>
+              <sortModules>true</sortModules>
               <sortPlugins>groupId,artifactId</sortPlugins>
               <sortProperties>true</sortProperties>
             </sortPom>
