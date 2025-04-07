@@ -13,11 +13,11 @@
   <name>todo-service</name>
   <description>todo-service</description>
   <properties>
-    <checker-qual.version>3.49.1</checker-qual.version>
+    <checker-qual.version>3.49.2</checker-qual.version>
     <cleanthat.version>2.22</cleanthat.version>
     <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
     <git-build-hook-maven-plugin.version>3.5.0</git-build-hook-maven-plugin.version>
-    <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
     <java.version>21</java.version>
     <palantir-java-format.version>2.61.0</palantir-java-format.version>
     <spotless.version>2.44.3</spotless.version>
