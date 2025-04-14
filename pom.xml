@@ -19,8 +19,8 @@
     <git-build-hook-maven-plugin.version>3.5.0</git-build-hook-maven-plugin.version>
     <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
     <java.version>21</java.version>
-    <palantir-java-format.version>2.61.0</palantir-java-format.version>
-    <spotless.version>2.44.3</spotless.version>
+    <palantir-java-format.version>2.63.0</palantir-java-format.version>
+    <spotless.version>2.44.4</spotless.version>
     <spring-cloud.version>2024.0.1</spring-cloud.version>
     <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
     <xmlunit2.version>2.10.0</xmlunit2.version>
